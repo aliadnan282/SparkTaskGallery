@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "550094555244",
+    "firebase_url": "https://profile-fba71.firebaseio.com",
+    "project_id": "profile-fba71",
+    "storage_bucket": "profile-fba71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550094555244:android:13c2ddd0c90d960c56f049",
+        "android_client_info": {
+          "package_name": "com.sparktask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "550094555244-1odls7q5ka4491vvm6uv0ejfqsqaqm9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAojVwuzJZ8dr-5TZ4PoacGra1ofQdo3Vg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "550094555244-1odls7q5ka4491vvm6uv0ejfqsqaqm9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
