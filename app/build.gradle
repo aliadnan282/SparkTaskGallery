@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -41,6 +43,9 @@ dependencies {
 
     // Circular Image
     implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    annotationProcessor 'androidx.annotation:annotation:1.1.0'
 
     // Image Cropper
     implementation "com.theartofdev.edmodo:android-image-cropper:2.8.0"
@@ -50,11 +55,15 @@ dependencies {
 
     // Firebase storage
     implementation "com.google.firebase:firebase-storage:19.0.1"
+    implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
 
     //Architecture component
     implementation "androidx.lifecycle:lifecycle-livedata:$rootProject.lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$rootProject.lifecycleVersion"
     implementation "android.arch.lifecycle:extensions:$rootProject.lifecycleVersion"
+    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
 apply plugin: 'com.google.gms.google-services'

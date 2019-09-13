@@ -54,26 +54,24 @@
             android:id="@+id/rv_galler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="10dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="10"
             tools:itemSpan="2"
-            android:clipToPadding="false"
-            android:paddingBottom="10dp"
-            tools:listitem="@layout/vh_gallery_item" />
+            tools:listitem="@layout/vh_gallery__item" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fb_upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
             android:src="@drawable/ic_camera"
             android:tint="@color/white"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            app:fab_colorNormal="@color/pink"
-            app:fab_colorPressed="@color/pink_pressed"
-            app:borderWidth = "0dp" />
+            app:borderWidth="0dp" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

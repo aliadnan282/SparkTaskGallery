@@ -1,3 +1,4 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="vh_gallery_image_size">137dp</dimen>
 </resources>
