@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.spaktask.utils.AppConstants;
+import com.spaktask.utils.StateLiveData;
 
 import java.util.UUID;
 
@@ -18,11 +19,13 @@ public class GalleryViewModel extends AndroidViewModel {
     private FirebaseStorage storage;
     private StorageReference reference;
 
-    public MutableLiveData<Object> getStatus() {
+
+    // Observer listener instance
+    private StateLiveData<Object> status = new StateLiveData<Object>();
+
+    public StateLiveData<Object> getStatus() {
         return status;
     }
-    // Observer listener instance
-    private MutableLiveData<Object> status = new MutableLiveData<>();
 
     public GalleryViewModel(@NonNull Application application) {
         super(application);
@@ -31,27 +34,29 @@ public class GalleryViewModel extends AndroidViewModel {
     }
 
     public void getImagesList() {
+        status.postLoading();
         StorageReference ref = reference.child(AppConstants.FIREBASE_BUCKET);
         ref.listAll().addOnSuccessListener(listResult -> {
-            status.postValue(listResult.getItems());
+            status.postSuccess(listResult.getItems());
         });
     }
 
     public void uploadImage(Uri uri) {
+        status.postLoading();
         StorageReference ref = reference.child(AppConstants.FIREBASE_BUCKET + UUID.randomUUID().toString());
         ref.putFile(uri)
                 .addOnSuccessListener(taskSnapshot -> {
-                    status.postValue("successfull");
+                    status.postSuccess("successful");
 
                 })
                 .addOnFailureListener(e -> {
-                    status.postValue(e.getLocalizedMessage());
+                    status.postError(e);
 
                 })
                 .addOnProgressListener(taskSnapshot -> {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                             .getTotalByteCount());
-                    status.postValue(String.valueOf(progress));
+                    status.postProgress(progress);
 
                 });
     }

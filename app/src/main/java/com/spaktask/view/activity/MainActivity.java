@@ -1,27 +1,28 @@
 package com.spaktask.view.activity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.storage.StorageReference;
 import com.spaktask.R;
 import com.spaktask.databinding.ActivityMainBinding;
+import com.spaktask.utils.AppUtils;
 import com.spaktask.utils.GridSpacingItemDecoration;
 import com.spaktask.view.adapter.GalleryAdapter;
 import com.spaktask.viewmodel.GalleryViewModel;
+import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import gun0912.tedimagepicker.builder.TedImagePicker;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     private GalleryViewModel viewModel;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Populate data
         getImagesList();
+
+
     }
 
     private void initializeView() {
         // Recyclerview init
-        binding.rvGaller.setLayoutManager(new GridLayoutManager(this,3));
+        binding.rvGaller.setLayoutManager(new GridLayoutManager(this, 3));
         int spanCount = 3; // 3 columns
         int spacing = 30; // margin
         boolean includeEdge = false;
@@ -59,24 +64,45 @@ public class MainActivity extends AppCompatActivity {
         galleryAdapter = new GalleryAdapter(this);
         binding.rvGaller.setAdapter(galleryAdapter);
 
+        //Initialize progressbar
+        progressDialog = AppUtils.initProgressDialog(this, getString(R.string.dialog_detail));
+
         //Upload image click listener
         binding.fbUpload.setOnClickListener(view -> {
+
             TedImagePicker.with(this)
                     .start(uri -> {
-                        uploadImage(uri);
-                        Toast.makeText(MainActivity.this, "URI:" + uri, Toast.LENGTH_SHORT).show();
+                        CropImage.activity(uri)
+                                .start(this);
+                        Log.d(TAG, "URI: " + uri);
                     });
         });
 
         // Callback for successful image uploading
         viewModel.getStatus().observe(this, status -> {
-            if (status instanceof String)
-            Toast.makeText(this, "Status:" + status, Toast.LENGTH_SHORT).show();
-            else {
-                galleryAdapter.setData((List<StorageReference>) status);
-                Log.d(TAG, "initializeView: "+status.toString());
+            switch (status.getStatus()) {
+                case LOADING:
+                    progressDialog.show();
+                    break;
+                case SUCCESS:
+                    if (status.getData() instanceof String)
+                        Log.d(TAG, "upload image status: " + status);
+                    else {
+                        galleryAdapter.setData((List<StorageReference>) status.getData());
+                        Log.d(TAG, "initializeView: " + status.toString());
+                    }
+                    //Hide progressbar dialog
+                    AppUtils.hideProgressDialog(progressDialog);
+                    break;
+                case COMPLETE:
+                case ERROR:
+                    //Hide progressbar dialog
+                    AppUtils.hideProgressDialog(progressDialog);
+                    break;
             }
+
         });
+
     }
 
     private void getImagesList() {
@@ -89,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_referesh,menu);
+        getMenuInflater().inflate(R.menu.menu_referesh, menu);
         return true;
     }
 
@@ -101,5 +127,23 @@ public class MainActivity extends AppCompatActivity {
             getImagesList();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                //Show progress bar dialog
+                uploadImage(resultUri);
+                // Toast.makeText(MainActivity.this, "URI:" + resultUri, Toast.LENGTH_SHORT).show();
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Log.e(TAG, "onActivityResult: ", error);
+            }
+        }
     }
 }

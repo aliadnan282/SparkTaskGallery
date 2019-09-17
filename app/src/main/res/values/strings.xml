@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">SpakTasK</string>
+    <string name="app_name">Gallery Upload</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="refresh">Refresh list</string>
+    <string name="dialog_title_upload">Uploading</string>
+    <string name="dialog_title_refresh">Refreshing</string>
+    <string name="dialog_detail">Please wait...</string>
 </resources>
