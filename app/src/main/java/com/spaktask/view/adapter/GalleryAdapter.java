@@ -62,6 +62,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         public void bind(StorageReference storageReference) {
             GlideApp.with(context)
                     .load(storageReference)
+                    .placeholder(context.getDrawable(R.mipmap.ic_launcher))
                     .into(localBinding.ivItem);
         }
     }

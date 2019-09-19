@@ -6,6 +6,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -14,7 +15,7 @@ import com.spaktask.utils.StateLiveData;
 
 import java.util.UUID;
 
-public class GalleryViewModel extends AndroidViewModel {
+public class GalleryViewModel extends ViewModel {
 
     private FirebaseStorage storage;
     private StorageReference reference;
@@ -27,8 +28,7 @@ public class GalleryViewModel extends AndroidViewModel {
         return status;
     }
 
-    public GalleryViewModel(@NonNull Application application) {
-        super(application);
+    public GalleryViewModel() {
         storage = FirebaseStorage.getInstance();
         reference = storage.getReference();
     }
